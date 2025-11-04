@@ -1,0 +1,10 @@
+name: fcp-audit-publisher-stub-test
+
+services:
+  fcp-audit-publisher-stub:
+    build:
+      target: development
+    command: npm test
+    volumes:
+      - ./test:/home/node/test
+      - ./coverage:/home/node/coverage
