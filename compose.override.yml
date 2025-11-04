@@ -1,0 +1,26 @@
+name: fcp-audit
+
+services:
+  fcp-audit-publisher-stub:
+    ports:
+      - '3005:3005'
+    networks:
+      - fcp-audit
+
+  localstack:
+    ports:
+      - '4566:4566'
+      - '4510-4559:4510-4559'
+    volumes:
+      - ./localstack/localstack.sh:/etc/localstack/init/ready.d/localstack.sh
+      - localstack-data:/var/lib/localstack
+    networks:
+      - fcp-audit
+
+networks:
+  fcp-audit:
+    driver: bridge
+    name: fcp-audit
+
+volumes:
+  localstack-data:
