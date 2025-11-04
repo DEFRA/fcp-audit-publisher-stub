@@ -30,6 +30,6 @@ subscribe_queue_to_topic() {
 }
 
 create_queue "fcp_audit"
-create_topic "fcp_audit_publisher"
+create_topic "fcp_audit_publisher_stub"
 
-subscribe_queue_to_topic "fcp_audit_publisher" "fcp_audit"
+subscribe_queue_to_topic "fcp_audit_publisher_stub" "fcp_audit"
