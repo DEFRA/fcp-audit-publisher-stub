@@ -20,7 +20,7 @@ export async function simulateMessages ({ scenario, repetitions }) {
   for (let i = 0; i < repetitions; i++) {
     for (const s of scenarios) {
       for (const event of s) {
-        event.timestamp = new Date().toISOString()
+        event.datetime = new Date().toISOString()
         event.correlationId = crypto.randomUUID()
         totalEvents++
 
