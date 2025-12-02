@@ -1,25 +1,40 @@
-export const example = {
-  eventType: 'BANK_DETAILS_AUDIT',
-  timestamp: new Date().toISOString(),
-  userId: 'farmer.john@example.com',
-  sourceIp: '10.44.122.15',
-  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-  correlationId: '123e4567-e89b-12d3-a456-426614174000',
+export const event = {
+  user: 'IDM/8b7c6b0a-4ea2-e911-a971-000d3a28d1a0',
+  sessionid: 'e66d78f5-a58d-46f6-a9b4-f8c90e99b6dc',
+  correlationid: '79389915-7275-457a-b8ca-8bf206b2e67b',
+  datetime: '2025-12-01T12:51:41.381Z',
+  environment: 'prod',
+  version: '1.2',
+  application: 'FCP001',
+  component: 'fcp-audit',
+  ip: '192.168.1.100',
   security: {
-    action: 'LOGIN_SUCCESS',
-    location: 'Norwich, UK',
+    pmcode: '0706',
+    priority: 0,
     details: {
-      authenticatedMethod: 'Portal DB',
-      role: 'FARMER_USER'
+      transactioncode: '2306',
+      message: 'User successfully accessed audit record',
+      additionalinfo: 'Audit event successfully processed'
     }
   },
   audit: {
-    action: 'UPDATE_BANK_DETAILS',
-    entity: 'BankDetails',
-    entityId: 'BNK-76439210',
+    eventtype: 'AuditRecordAccess',
+    action: 'VIEW_AUDIT_RECORD',
+    entity: 'AuditRecord',
+    entityid: 'AUD-79389915',
     status: 'SUCCESS',
     details: {
-      caseId: 'CRM-09384721'
+      caseid: 'CRM-09384721'
     }
   }
+}
+
+export const auditEvent = {
+  ...event,
+  security: null
+}
+
+export const socEvent = {
+  ...event,
+  audit: null
 }
