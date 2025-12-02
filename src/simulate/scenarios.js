@@ -1,7 +1,9 @@
 import * as events from './events.js'
 
 export const singleEvents = {
-  example: [events.example]
+  event: [events.event],
+  auditEvent: [events.auditEvent],
+  socEvent: [events.socEvent]
 }
 
 export const completeStreams = {}
