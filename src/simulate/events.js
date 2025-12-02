@@ -31,10 +31,10 @@ export const event = {
 
 export const auditEvent = {
   ...event,
-  security: undefined
+  security: null
 }
 
 export const socEvent = {
   ...event,
-  audit: undefined
+  audit: null
 }
