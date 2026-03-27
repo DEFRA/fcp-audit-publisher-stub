@@ -10,6 +10,6 @@ ignore:
   SNYK-JS-CONVICT-15182994:
     - '*':
         reason: None Given
-        expires: 2026-04-26T18:40:36.241Z
-        created: 2026-03-27T18:40:36.245Z
+        expires: 2026-04-26T18:41:23.165Z
+        created: 2026-03-27T18:41:23.168Z
 patch: {}
