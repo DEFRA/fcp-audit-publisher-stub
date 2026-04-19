@@ -8,7 +8,7 @@
 
 # FCP Audit Publisher Stub
 
-The Audit service service is a common component to support capturing of audit events across the FCP ecosystem.
+The FCP Audit Publisher Stub is a development and testing tool to support capturing of audit events across the FCP ecosystem.
 
 FCP Audit subscribes to events across the FCP ecosystem via an AWS SQS queue. These events are persisted and precompiled into a data model which can be queried via REST API endpoints.
 
@@ -39,7 +39,7 @@ This application is intended to be run in a Docker container to ensure consisten
 
 Docker can be installed from [Docker's official website](https://docs.docker.com/get-docker/).
 
-> The test suite includes integration tests which are dependent on a Postgres container so cannot be run without Docker.
+> The test suite includes integration tests which are dependent on a Floci (AWS SQS/SNS emulator) container so cannot be run without Docker.
 
 ## Local development
 
@@ -59,9 +59,11 @@ To run the application in `development` mode run:
 npm run docker:dev
 ```
 
+The application runs on port 3005 by default.
+
 ### Testing
 
-To test the application run:
+Tests **must** be run using Docker as configuration is applied via Docker Compose:
 
 ```bash
 npm run docker:test
@@ -72,6 +74,8 @@ Tests can also be run in watch mode to support Test Driven Development (TDD):
 ```bash
 npm run docker:test:watch
 ```
+
+> Do not run `npm test` directly — environment configuration is only set correctly when running via Docker.
 
 ## Licence
 
