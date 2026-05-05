@@ -1,3 +1,4 @@
+import os from 'node:os'
 import { SNSClient } from '@aws-sdk/client-sns'
 import { publishAuditEvent } from '@defra/fcp-audit-publisher'
 import { config } from '../config.js'
@@ -13,6 +14,18 @@ const snsClient = new SNSClient({
   })
 })
 
+function getSelfIp () {
+  const interfaces = os.networkInterfaces()
+  for (const iface of Object.values(interfaces)) {
+    for (const addr of iface) {
+      if (addr.family === 'IPv4' && !addr.internal) {
+        return addr.address
+      }
+    }
+  }
+  return '127.0.0.1'
+}
+
 export async function simulateMessages ({ scenario, repetitions }) {
   const scenarios = getScenarios(scenario)
   let totalEvents = 0
@@ -22,10 +35,8 @@ export async function simulateMessages ({ scenario, repetitions }) {
       for (const event of s) {
         totalEvents++
 
-        const { correlationid: _correlationid, ...eventPayload } = event
         await publishAuditEvent(
-          eventPayload,
-          { snsClient, sns: { topicArn: sns.topicArn }, generateCorrelationId: true }
+          event, { snsClient, sns: { topicArn: sns.topicArn }, generateCorrelationId: true, ip: getSelfIp() }
         )
       }
     }

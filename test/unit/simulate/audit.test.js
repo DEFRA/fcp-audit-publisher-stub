@@ -67,7 +67,8 @@ describe('simulateMessages', () => {
       expect.any(Object),
       expect.objectContaining({
         sns: { topicArn: 'arn:aws:sns:eu-west-2:000000000000:fcp_audit' },
-        generateCorrelationId: true
+        generateCorrelationId: true,
+        ip: expect.any(String)
       })
     )
   })
