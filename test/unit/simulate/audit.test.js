@@ -71,6 +71,14 @@ describe('simulateMessages', () => {
     )
   })
 
+  test('generates a unique correlationid for each event', async () => {
+    await simulateMessages({ scenario: undefined, repetitions: 1 })
+
+    const correlationIds = publishAuditEvent.mock.calls.map(([event]) => event.correlationid)
+    const unique = new Set(correlationIds)
+    expect(unique.size).toBe(correlationIds.length)
+  })
+
   test('throws when scenario is not found', async () => {
     await expect(
       simulateMessages({ scenario: 'single.unknown', repetitions: 1 })
