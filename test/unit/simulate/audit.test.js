@@ -17,7 +17,7 @@ vi.mock('../../../src/config.js', () => ({
 }))
 
 vi.mock('@aws-sdk/client-sns', () => ({
-  SNSClient: vi.fn().mockImplementation(() => ({}))
+  SNSClient: vi.fn()
 }))
 
 const { publishAuditEvent } = await import('@defra/fcp-audit-publisher')

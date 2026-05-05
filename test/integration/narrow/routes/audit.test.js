@@ -8,7 +8,7 @@ vi.mock('@defra/fcp-audit-publisher', () => ({
 }))
 
 vi.mock('@aws-sdk/client-sns', () => ({
-  SNSClient: vi.fn().mockImplementation(() => ({}))
+  SNSClient: vi.fn()
 }))
 
 const { createServer } = await import('../../../../src/server.js')

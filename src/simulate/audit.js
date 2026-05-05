@@ -1,4 +1,5 @@
-import os from 'node:os'
+import crypto from 'node:crypto'
+import { createSocket } from 'node:dgram'
 import { SNSClient } from '@aws-sdk/client-sns'
 import { publishAuditEvent } from '@defra/fcp-audit-publisher'
 import { config } from '../config.js'
@@ -14,20 +15,9 @@ const snsClient = new SNSClient({
   })
 })
 
-function getSelfIp () {
-  const interfaces = os.networkInterfaces()
-  for (const iface of Object.values(interfaces)) {
-    for (const addr of iface) {
-      if (addr.family === 'IPv4' && !addr.internal) {
-        return addr.address
-      }
-    }
-  }
-  return '127.0.0.1'
-}
-
 export async function simulateMessages ({ scenario, repetitions }) {
   const scenarios = getScenarios(scenario)
+  const ip = await getSelfIp()
   let totalEvents = 0
 
   for (let i = 0; i < repetitions; i++) {
@@ -35,8 +25,10 @@ export async function simulateMessages ({ scenario, repetitions }) {
       for (const event of s) {
         totalEvents++
 
+        event.sessionid = crypto.randomUUID()
+
         await publishAuditEvent(
-          event, { snsClient, sns: { topicArn: sns.topicArn }, generateCorrelationId: true, ip: getSelfIp() }
+          event, { snsClient, sns: { topicArn: sns.topicArn }, generateCorrelationId: true, ip }
         )
       }
     }
@@ -51,4 +43,16 @@ function getScenarios (scenario) {
     return [wrap(getScenario(scenario))]
   }
   return listScenarios().map(s => wrap(getScenario(s.path)))
+}
+
+function getSelfIp () {
+  return new Promise((resolve) => {
+    const socket = createSocket('udp4')
+    socket.on('error', () => { socket.close(); resolve('127.0.0.1') })
+    socket.connect(80, '1.1.1.1', () => {
+      const ip = socket.address().address
+      socket.close()
+      resolve(ip)
+    })
+  })
 }
