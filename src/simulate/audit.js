@@ -1,5 +1,5 @@
-import crypto from 'node:crypto'
-import { PublishCommand, SNSClient } from '@aws-sdk/client-sns'
+import { SNSClient } from '@aws-sdk/client-sns'
+import { publishAuditEvent } from '@defra/fcp-audit-publisher'
 import { config } from '../config.js'
 import { getScenario, listScenarios } from './scenarios.js'
 
@@ -20,16 +20,9 @@ export async function simulateMessages ({ scenario, repetitions }) {
   for (let i = 0; i < repetitions; i++) {
     for (const s of scenarios) {
       for (const event of s) {
-        event.datetime = new Date().toISOString()
-        event.correlationId = crypto.randomUUID()
         totalEvents++
 
-        await snsClient.send(
-          new PublishCommand({
-            Message: JSON.stringify(event),
-            TopicArn: sns.topicArn
-          })
-        )
+        await publishAuditEvent(event, { snsClient, sns: { topicArn: sns.topicArn } })
       }
     }
   }
