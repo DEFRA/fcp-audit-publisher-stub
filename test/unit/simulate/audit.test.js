@@ -60,23 +60,23 @@ describe('simulateMessages', () => {
     expect(result).toEqual({ scenarios: 3, events: 6, repetitions: 2 })
   })
 
-  test('calls publishAuditEvent with snsClient and topicArn', async () => {
+  test('calls publishAuditEvent with snsClient, topicArn and generateCorrelationId', async () => {
     await simulateMessages({ scenario: 'single.auditEvent', repetitions: 1 })
 
     expect(publishAuditEvent).toHaveBeenCalledWith(
       expect.any(Object),
       expect.objectContaining({
-        sns: { topicArn: 'arn:aws:sns:eu-west-2:000000000000:fcp_audit' }
+        sns: { topicArn: 'arn:aws:sns:eu-west-2:000000000000:fcp_audit' },
+        generateCorrelationId: true
       })
     )
   })
 
-  test('generates a unique correlationid for each event', async () => {
-    await simulateMessages({ scenario: undefined, repetitions: 1 })
+  test('strips correlationid from event before publishing', async () => {
+    await simulateMessages({ scenario: 'single.auditEvent', repetitions: 1 })
 
-    const correlationIds = publishAuditEvent.mock.calls.map(([event]) => event.correlationid)
-    const unique = new Set(correlationIds)
-    expect(unique.size).toBe(correlationIds.length)
+    const [eventArg] = publishAuditEvent.mock.calls[0]
+    expect(eventArg).not.toHaveProperty('correlationid')
   })
 
   test('throws when scenario is not found', async () => {

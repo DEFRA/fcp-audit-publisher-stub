@@ -1,4 +1,3 @@
-import crypto from 'node:crypto'
 import { SNSClient } from '@aws-sdk/client-sns'
 import { publishAuditEvent } from '@defra/fcp-audit-publisher'
 import { config } from '../config.js'
@@ -23,9 +22,10 @@ export async function simulateMessages ({ scenario, repetitions }) {
       for (const event of s) {
         totalEvents++
 
+        const { correlationid: _correlationid, ...eventPayload } = event
         await publishAuditEvent(
-          { ...event, correlationid: crypto.randomUUID() },
-          { snsClient, sns: { topicArn: sns.topicArn } }
+          eventPayload,
+          { snsClient, sns: { topicArn: sns.topicArn }, generateCorrelationId: true }
         )
       }
     }
