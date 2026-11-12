@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
+    "check:synthetic-ids": "sfd-id-check --staged",
     "dev": "NODE_ENV=development npm run server:watch",
     "dev:debug": "NODE_ENV=development npm run server:debug",
     "docker:build": "docker compose build",
@@ -53,6 +54,7 @@
   "devDependencies": {
     "@vitest/coverage-v8": "4.1.12",
     "eslint": "9.29.0",
+    "fcp-sfd-core": "github:DEFRA/fcp-sfd-core#95f58ade56b2d0dd0f15bdcba6a5f37a54bcc939",
     "husky": "9.1.7",
     "neostandard": "0.12.1",
     "nodemon": "3.1.14",
